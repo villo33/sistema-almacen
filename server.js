@@ -267,10 +267,12 @@ app.post("/api/entradas", async(req,res)=>{
 
         const {
 
-            material_id,
-            cantidad,
-            proveedor_id,
-            observacion
+ material_id,
+cantidad,
+proveedor,
+factura,
+recibido,
+observacion
 
         } = req.body;
 

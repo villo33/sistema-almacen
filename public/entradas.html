@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entradas | Sistema de Almacén</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entradas | Sistema de Almacén</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header>
-    <h1>Sistema de Almacén</h1>
+<h1>Sistema de Almacén</h1>
 </header>
 
+
 <nav>
-    <ul>
-        <li><a href="index.html">🏠 Inicio</a></li>
-        <li><a href="materiales.html">📦 Materiales</a></li>
-        <li><a href="entradas.html">📥 Entradas</a></li>
-        <li><a href="salidas.html">📤 Salidas</a></li>
-        <li><a href="inventario.html">📊 Inventario</a></li>
-        <li><a href="historial.html">📋 Historial</a></li>
-        <li><a href="proveedores.html">🏢 Proveedores</a></li>
-    </ul>
+<ul>
+<li><a href="index.html">🏠 Inicio</a></li>
+<li><a href="materiales.html">📦 Materiales</a></li>
+<li><a href="entradas.html">📥 Entradas</a></li>
+<li><a href="salidas.html">📤 Salidas</a></li>
+<li><a href="inventario.html">📊 Inventario</a></li>
+<li><a href="historial.html">📋 Historial</a></li>
+<li><a href="proveedores.html">🏢 Proveedores</a></li>
+</ul>
 </nav>
 
 
+
 <main>
+
 
 <h2>Registro de Entrada de Materiales</h2>
 
@@ -33,41 +37,72 @@
 <form id="formEntrada">
 
 
-    <label>Fecha</label><br>
-    <input type="date" id="fecha"><br><br>
+<label>Fecha</label><br>
+<input type="date" id="fecha"><br><br>
 
 
-    <label>Material</label><br>
-    <select id="material">
-        <option>Seleccione un material</option>
-    </select><br><br>
+<label>Material</label><br>
+
+<select id="material">
+
+<option value="">
+Seleccione un material
+</option>
+
+</select>
+
+<br><br>
 
 
-    <label>Cantidad</label><br>
-    <input type="number" id="cantidad" min="1"><br><br>
+<label>Cantidad</label><br>
+<input type="number" id="cantidad" min="1"><br><br>
 
 
-    <label>Proveedor</label><br>
-    <input type="text" id="proveedor" placeholder="Nombre del proveedor"><br><br>
+
+<label>Proveedor</label><br>
+
+<input type="text" id="proveedor" placeholder="Nombre del proveedor">
+
+<br><br>
 
 
-    <label>Número de Factura</label><br>
-    <input type="text" id="factura" placeholder="Opcional"><br><br>
+
+<label>Número de Factura</label><br>
+
+<input type="text" id="factura" placeholder="Factura">
+
+<br><br>
 
 
-    <label>Recibido por</label><br>
-    <input type="text" id="recibido" placeholder="Nombre del almacenista"><br><br>
+
+<label>Recibido por</label><br>
+
+<input type="text" id="recibido" placeholder="Nombre del almacenista">
+
+<br><br>
 
 
-    <label>Observaciones</label><br>
-    <textarea id="observacion" rows="4"></textarea><br><br>
+
+<label>Observaciones</label><br>
+
+<textarea id="observacion"></textarea>
+
+<br><br>
 
 
-    <button type="submit">Guardar Entrada</button>
-    <button type="reset">Limpiar</button>
+
+<button type="submit">
+Guardar Entrada
+</button>
+
+
+<button type="reset">
+Limpiar
+</button>
 
 
 </form>
+
 
 
 <hr><br>
@@ -82,19 +117,23 @@
 <thead>
 
 <tr>
-    <th>Fecha</th>
-    <th>Material</th>
-    <th>Cantidad</th>
-    <th>Proveedor</th>
-    <th>Factura</th>
-    <th>Recibido por</th>
-    <th>Observación</th>
+
+<th>Fecha</th>
+<th>Material</th>
+<th>Cantidad</th>
+<th>Proveedor</th>
+<th>Factura</th>
+<th>Recibido por</th>
+<th>Observación</th>
+
 </tr>
 
 </thead>
 
 
+
 <tbody id="tablaEntradas">
+
 
 </tbody>
 
@@ -106,6 +145,7 @@
 
 
 
+
 <script>
 
 
@@ -113,112 +153,123 @@
 // CARGAR MATERIALES
 // =========================
 
+
 async function cargarMateriales(){
 
 
-    const respuesta = await fetch("/api/materiales");
+const respuesta = await fetch("/api/materiales");
 
 
-    const materiales = await respuesta.json();
+const materiales = await respuesta.json();
 
 
-    const select = document.getElementById("material");
+const select = document.getElementById("material");
+
+
+select.innerHTML = `
+
+<option value="">
+Seleccione un material
+</option>
+
+`;
 
 
 
-    select.innerHTML = `
-
-        <option value="">
-        Seleccione un material
-        </option>
-
-    `;
+materiales.forEach(m=>{
 
 
+select.innerHTML += `
 
-    materiales.forEach(m=>{
+<option value="${m.id}">
 
+${m.nombre} (Stock: ${m.stock})
 
-        select.innerHTML += `
+</option>
 
-
-        <option value="${m.id}">
-
-            ${m.nombre} (Stock: ${m.stock})
-
-        </option>
+`;
 
 
-        `;
-
-
-    });
+});
 
 
 }
 
 
 
+
 // =========================
-// CARGAR HISTORIAL ENTRADAS
+// CARGAR ENTRADAS
 // =========================
+
 
 async function cargarEntradas(){
 
 
-    const respuesta = await fetch("/api/entradas");
+const respuesta = await fetch("/api/entradas");
 
 
-    const entradas = await respuesta.json();
+const entradas = await respuesta.json();
 
 
-
-    const tabla = document.getElementById("tablaEntradas");
-
+const tabla = document.getElementById("tablaEntradas");
 
 
-    tabla.innerHTML = "";
+tabla.innerHTML="";
 
 
 
-    entradas.forEach(e=>{
+entradas.forEach(e=>{
 
 
-        tabla.innerHTML += `
+tabla.innerHTML += `
 
 
-        <tr>
+<tr>
+
+<td>
+${new Date(e.fecha).toLocaleDateString()}
+</td>
 
 
-            <td>${new Date(e.fecha).toLocaleDateString()}</td>
+<td>
+${e.material}
+</td>
 
 
-            <td>${e.material}</td>
+<td>
+${e.cantidad}
+</td>
 
 
-            <td>${e.cantidad}</td>
+<td>
+${e.proveedor || ""}
+</td>
 
 
-            <td>-</td>
+<td>
+${e.factura || ""}
+</td>
 
 
-            <td>-</td>
+<td>
+${e.recibido || ""}
+</td>
 
 
-            <td>-</td>
+<td>
+${e.observacion || ""}
+</td>
 
 
-            <td>${e.observacion || ""}</td>
+</tr>
 
 
-        </tr>
+`;
 
 
-        `;
 
-
-    });
-
+});
 
 
 }
@@ -233,104 +284,106 @@ async function cargarEntradas(){
 
 
 document.getElementById("formEntrada")
-.addEventListener("submit", async(e)=>{
+.addEventListener("submit",async(e)=>{
 
 
-    e.preventDefault();
+e.preventDefault();
 
 
 
-    const datos = {
+const datos = {
 
 
-        material_id:
-        document.getElementById("material").value,
+material_id:
+document.getElementById("material").value,
 
 
-        cantidad:
-        document.getElementById("cantidad").value,
+cantidad:
+document.getElementById("cantidad").value,
 
 
-        proveedor_id:null,
+proveedor:
+document.getElementById("proveedor").value,
 
 
-        observacion:
-        document.getElementById("observacion").value
+factura:
+document.getElementById("factura").value,
 
 
-    };
+recibido:
+document.getElementById("recibido").value,
 
 
+observacion:
+document.getElementById("observacion").value
 
 
-    try{
 
+};
 
-        const respuesta = await fetch("/api/entradas",{
 
 
-            method:"POST",
+try{
 
 
-            headers:{
+const respuesta = await fetch("/api/entradas",{
 
 
-                "Content-Type":"application/json"
+method:"POST",
 
 
-            },
+headers:{
 
 
-            body:JSON.stringify(datos)
+"Content-Type":"application/json"
 
 
-        });
+},
 
 
+body:JSON.stringify(datos)
 
 
-        const resultado = await respuesta.json();
+});
 
 
 
-        if(!respuesta.ok){
+const resultado = await respuesta.json();
 
 
-            throw new Error(resultado.error);
 
+if(!respuesta.ok){
 
-        }
 
+throw new Error(resultado.error);
 
 
+}
 
-        alert("Entrada guardada correctamente");
 
 
+alert("Entrada guardada correctamente");
 
-        document.getElementById("formEntrada").reset();
 
 
+document.getElementById("formEntrada").reset();
 
-        // ACTUALIZA LA TABLA AUTOMÁTICAMENTE
 
-        cargarEntradas();
 
+cargarEntradas();
 
 
-        // ACTUALIZA STOCK DEL SELECT
+cargarMateriales();
 
-        cargarMateriales();
 
 
+}catch(error){
 
-    }catch(error){
 
+alert(error.message);
 
-        alert(error.message);
 
-
-    }
+}
 
 
 
@@ -340,7 +393,7 @@ document.getElementById("formEntrada")
 
 
 
-// CARGA INICIAL
+// INICIO
 
 cargarMateriales();
 
@@ -353,4 +406,3 @@ cargarEntradas();
 
 </body>
 </html>
-```
