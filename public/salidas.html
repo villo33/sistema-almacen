@@ -1,0 +1,92 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salidas | Sistema de Almacén</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Almacén</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">🏠 Inicio</a></li>
+        <li><a href="materiales.html">📦 Materiales</a></li>
+        <li><a href="entradas.html">📥 Entradas</a></li>
+        <li><a href="salidas.html">📤 Salidas</a></li>
+        <li><a href="inventario.html">📊 Inventario</a></li>
+        <li><a href="historial.html">📋 Historial</a></li>
+        <li><a href="proveedores.html">🏢 Proveedores</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<h2>Registro de Salida de Materiales</h2>
+
+<form id="formSalida">
+
+    <label>Fecha</label><br>
+    <input type="date" id="fecha"><br><br>
+
+    <label>Material</label><br>
+    <select id="material">
+        <option>Seleccione un material</option>
+    </select><br><br>
+
+    <label>Cantidad</label><br>
+    <input type="number" id="cantidad" min="1"><br><br>
+
+    <label>Responsable</label><br>
+    <input type="text" id="responsable" placeholder="Persona que recibe el material"><br><br>
+
+    <label>Frente de Trabajo</label><br>
+    <input type="text" id="frente" placeholder="Ej: Torre A, Urbanismo, Cimentación"><br><br>
+
+    <label>Observaciones</label><br>
+    <textarea id="observacion" rows="4"></textarea><br><br>
+
+    <button type="submit">Registrar Salida</button>
+    <button type="reset">Limpiar</button>
+
+</form>
+
+<hr><br>
+
+<h2>Historial de Salidas</h2>
+
+<table border="1" width="100%" cellspacing="0">
+
+<thead>
+
+<tr>
+    <th>Fecha</th>
+    <th>Material</th>
+    <th>Cantidad</th>
+    <th>Responsable</th>
+    <th>Frente</th>
+    <th>Observación</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaSalidas">
+
+<!-- Aquí aparecerán las salidas -->
+
+</tbody>
+
+</table>
+
+</main>
+
+<script src="js/salidas.js"></script>
+
+</body>
+</html>
+```

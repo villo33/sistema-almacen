@@ -1,0 +1,128 @@
+/*==================================================
+    SISTEMA DE ALMACÉN
+    ESTILOS GENERALES
+==================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#eef2f7;
+    color:#333;
+    display:flex;
+    min-height:100vh;
+}
+
+/*========================
+        MENÚ LATERAL
+========================*/
+
+nav{
+    width:250px;
+    background:linear-gradient(180deg,#0F172A,#1E3A8A);
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    overflow:auto;
+    box-shadow:4px 0 15px rgba(0,0,0,.15);
+}
+
+header{
+    background:#2563EB;
+    color:#fff;
+    text-align:center;
+    padding:25px;
+    font-size:24px;
+    font-weight:bold;
+    letter-spacing:1px;
+    border-bottom:1px solid rgba(255,255,255,.2);
+}
+
+nav ul{
+    list-style:none;
+    padding:20px 0;
+}
+
+nav ul li{
+    margin:8px 0;
+}
+
+nav ul li a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 25px;
+    transition:.3s;
+    font-size:17px;
+}
+
+nav ul li a:hover{
+    background:#3B82F6;
+    padding-left:35px;
+}
+
+/*========================
+        CONTENIDO
+========================*/
+
+main{
+    margin-left:270px;
+    width:calc(100% - 270px);
+    padding:40px;
+}
+
+main h2{
+    color:#1E3A8A;
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+hr{
+    margin:30px 0;
+    border:none;
+    border-top:1px solid #ddd;
+}
+
+/*========================
+        TARJETAS
+========================*/
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+    margin-bottom:25px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h3{
+    color:#2563EB;
+    margin-bottom:10px;
+}
+
+/*========================
+      SCROLL
+========================*/
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#2563EB;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#ddd;
+}

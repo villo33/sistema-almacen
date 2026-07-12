@@ -1,0 +1,67 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | Sistema de Almacén</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Almacén</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">🏠 Inicio</a></li>
+        <li><a href="materiales.html">📦 Materiales</a></li>
+        <li><a href="entradas.html">📥 Entradas</a></li>
+        <li><a href="salidas.html">📤 Salidas</a></li>
+        <li><a href="inventario.html">📊 Inventario</a></li>
+        <li><a href="historial.html">📋 Historial</a></li>
+        <li><a href="proveedores.html">🏢 Proveedores</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<h2>Inventario General</h2>
+
+<input type="text" id="buscar" placeholder="Buscar material...">
+
+<br><br>
+
+<table border="1" width="100%" cellspacing="0">
+
+<thead>
+
+<tr>
+    <th>Código</th>
+    <th>Material</th>
+    <th>Categoría</th>
+    <th>Unidad</th>
+    <th>Stock Actual</th>
+    <th>Stock Mínimo</th>
+    <th>Estado</th>
+    <th>Ubicación</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaInventario">
+
+<!-- Aquí se mostrarán los materiales -->
+
+</tbody>
+
+</table>
+
+</main>
+
+<script src="js/inventario.js"></script>
+
+</body>
+</html>
+```

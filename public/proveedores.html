@@ -1,0 +1,95 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proveedores | Sistema de Almacén</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Almacén</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">🏠 Inicio</a></li>
+        <li><a href="materiales.html">📦 Materiales</a></li>
+        <li><a href="entradas.html">📥 Entradas</a></li>
+        <li><a href="salidas.html">📤 Salidas</a></li>
+        <li><a href="inventario.html">📊 Inventario</a></li>
+        <li><a href="historial.html">📋 Historial</a></li>
+        <li><a href="proveedores.html">🏢 Proveedores</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<h2>Registro de Proveedores</h2>
+
+<form id="formProveedor">
+
+    <label>Nombre de la Empresa</label><br>
+    <input type="text" id="empresa" placeholder="Nombre de la empresa"><br><br>
+
+    <label>NIT</label><br>
+    <input type="text" id="nit" placeholder="Número de NIT"><br><br>
+
+    <label>Contacto</label><br>
+    <input type="text" id="contacto" placeholder="Nombre del contacto"><br><br>
+
+    <label>Teléfono</label><br>
+    <input type="text" id="telefono" placeholder="Número de teléfono"><br><br>
+
+    <label>Correo Electrónico</label><br>
+    <input type="email" id="correo" placeholder="correo@empresa.com"><br><br>
+
+    <label>Dirección</label><br>
+    <input type="text" id="direccion" placeholder="Dirección"><br><br>
+
+    <button type="submit">Guardar Proveedor</button>
+    <button type="reset">Limpiar</button>
+
+</form>
+
+<hr><br>
+
+<h2>Lista de Proveedores</h2>
+
+<input type="text" placeholder="Buscar proveedor">
+
+<br><br>
+
+<table border="1" width="100%" cellspacing="0">
+
+<thead>
+
+<tr>
+    <th>Empresa</th>
+    <th>NIT</th>
+    <th>Contacto</th>
+    <th>Teléfono</th>
+    <th>Correo</th>
+    <th>Dirección</th>
+    <th>Acciones</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaProveedores">
+
+<!-- Aquí aparecerán los proveedores -->
+
+</tbody>
+
+</table>
+
+</main>
+
+<script src="js/proveedores.js"></script>
+
+</body>
+</html>
+```

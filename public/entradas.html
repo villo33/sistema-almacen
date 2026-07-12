@@ -1,0 +1,94 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entradas | Sistema de Almacén</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Almacén</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">🏠 Inicio</a></li>
+        <li><a href="materiales.html">📦 Materiales</a></li>
+        <li><a href="entradas.html">📥 Entradas</a></li>
+        <li><a href="salidas.html">📤 Salidas</a></li>
+        <li><a href="inventario.html">📊 Inventario</a></li>
+        <li><a href="historial.html">📋 Historial</a></li>
+        <li><a href="proveedores.html">🏢 Proveedores</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<h2>Registro de Entrada de Materiales</h2>
+
+<form id="formEntrada">
+
+    <label>Fecha</label><br>
+    <input type="date" id="fecha"><br><br>
+
+    <label>Material</label><br>
+    <select id="material">
+        <option>Seleccione un material</option>
+    </select><br><br>
+
+    <label>Cantidad</label><br>
+    <input type="number" id="cantidad" min="1"><br><br>
+
+    <label>Proveedor</label><br>
+    <input type="text" id="proveedor" placeholder="Nombre del proveedor"><br><br>
+
+    <label>Número de Factura</label><br>
+    <input type="text" id="factura" placeholder="Opcional"><br><br>
+
+    <label>Recibido por</label><br>
+    <input type="text" id="recibido" placeholder="Nombre del almacenista"><br><br>
+
+    <label>Observaciones</label><br>
+    <textarea id="observacion" rows="4"></textarea><br><br>
+
+    <button type="submit">Guardar Entrada</button>
+    <button type="reset">Limpiar</button>
+
+</form>
+
+<hr><br>
+
+<h2>Historial de Entradas</h2>
+
+<table border="1" width="100%" cellspacing="0">
+
+<thead>
+<tr>
+    <th>Fecha</th>
+    <th>Material</th>
+    <th>Cantidad</th>
+    <th>Proveedor</th>
+    <th>Factura</th>
+    <th>Recibido por</th>
+    <th>Observación</th>
+</tr>
+</thead>
+
+<tbody id="tablaEntradas">
+
+<!-- Aquí aparecerán las entradas -->
+
+</tbody>
+
+</table>
+
+</main>
+
+<script src="js/entradas.js"></script>
+
+</body>
+</html>
+```

@@ -1,0 +1,71 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial | Sistema de Almacén</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Almacén</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">🏠 Inicio</a></li>
+        <li><a href="materiales.html">📦 Materiales</a></li>
+        <li><a href="entradas.html">📥 Entradas</a></li>
+        <li><a href="salidas.html">📤 Salidas</a></li>
+        <li><a href="inventario.html">📊 Inventario</a></li>
+        <li><a href="historial.html">📋 Historial</a></li>
+        <li><a href="proveedores.html">🏢 Proveedores</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<h2>Historial de Movimientos</h2>
+
+<label>Desde:</label>
+<input type="date" id="fechaInicio">
+
+<label>Hasta:</label>
+<input type="date" id="fechaFin">
+
+<button>Buscar</button>
+
+<br><br>
+
+<table border="1" width="100%" cellspacing="0">
+
+<thead>
+
+<tr>
+    <th>Fecha</th>
+    <th>Tipo</th>
+    <th>Material</th>
+    <th>Cantidad</th>
+    <th>Responsable</th>
+    <th>Observación</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaHistorial">
+
+<!-- Aquí aparecerán todos los movimientos -->
+
+</tbody>
+
+</table>
+
+</main>
+
+<script src="js/historial.js"></script>
+
+</body>
+</html>
+```

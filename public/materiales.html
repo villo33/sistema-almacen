@@ -1,0 +1,117 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiales | Sistema de Almacén</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Almacén</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">🏠 Inicio</a></li>
+        <li><a href="materiales.html">📦 Materiales</a></li>
+        <li><a href="entradas.html">📥 Entradas</a></li>
+        <li><a href="salidas.html">📤 Salidas</a></li>
+        <li><a href="inventario.html">📊 Inventario</a></li>
+        <li><a href="historial.html">📋 Historial</a></li>
+        <li><a href="proveedores.html">🏢 Proveedores</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<h2>Registro de Materiales</h2>
+
+<form id="formMaterial">
+
+    <label>Código</label><br>
+    <input type="text" id="codigo" placeholder="Ej: MAT-001"><br><br>
+
+    <label>Nombre del material</label><br>
+    <input type="text" id="nombre" placeholder="Ej: Cemento Gris"><br><br>
+
+    <label>Categoría</label><br>
+    <select id="categoria">
+        <option>Seleccione...</option>
+        <option>Agregados</option>
+        <option>Cemento</option>
+        <option>Acero</option>
+        <option>Tubería</option>
+        <option>Herramienta</option>
+        <option>Eléctrico</option>
+        <option>Plomería</option>
+        <option>Otros</option>
+    </select><br><br>
+
+    <label>Unidad</label><br>
+    <select id="unidad">
+        <option>Unidad</option>
+        <option>Bulto</option>
+        <option>Kg</option>
+        <option>Metro</option>
+        <option>m²</option>
+        <option>m³</option>
+        <option>Litro</option>
+    </select><br><br>
+
+    <label>Stock Inicial</label><br>
+    <input type="number" id="stock"><br><br>
+
+    <label>Stock Mínimo</label><br>
+    <input type="number" id="minimo"><br><br>
+
+    <label>Ubicación</label><br>
+    <input type="text" id="ubicacion" placeholder="Ej: Bodega Principal"><br><br>
+
+    <button type="submit">Guardar Material</button>
+    <button type="reset">Limpiar</button>
+
+</form>
+
+<hr><br>
+
+<h2>Lista de Materiales</h2>
+
+<input type="text" placeholder="Buscar material...">
+
+<br><br>
+
+<table border="1" width="100%" cellspacing="0">
+
+<thead>
+
+<tr>
+    <th>Código</th>
+    <th>Material</th>
+    <th>Categoría</th>
+    <th>Unidad</th>
+    <th>Stock</th>
+    <th>Stock Mínimo</th>
+    <th>Ubicación</th>
+    <th>Acciones</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaMateriales">
+
+<!-- Aquí aparecerán los materiales -->
+
+</tbody>
+
+</table>
+
+</main>
+
+<script src="js/materiales.js"></script>
+
+</body>
+</html>
+```
