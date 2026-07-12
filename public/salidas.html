@@ -85,7 +85,216 @@
 
 </main>
 
-<script src="js/salidas.js"></script>
+<script>
+
+
+async function cargarMateriales(){
+
+
+    const respuesta =
+    await fetch("/api/materiales");
+
+
+    const materiales =
+    await respuesta.json();
+
+
+
+    const select =
+    document.getElementById("material");
+
+
+
+    select.innerHTML =
+    `<option value="">Seleccione un material</option>`;
+
+
+
+    materiales.forEach(m=>{
+
+
+        select.innerHTML += `
+
+        <option value="${m.id}">
+
+        ${m.nombre} (Stock: ${m.stock})
+
+        </option>
+
+        `;
+
+
+    });
+
+
+}
+
+
+
+
+document.getElementById("formSalida")
+.addEventListener("submit",async(e)=>{
+
+
+    e.preventDefault();
+
+
+
+    const datos={
+
+
+        material_id:
+        document.getElementById("material").value,
+
+
+        cantidad:
+        document.getElementById("cantidad").value,
+
+
+        responsable:
+        document.getElementById("responsable").value,
+
+
+        observacion:
+        document.getElementById("observacion").value
+
+
+    };
+
+
+
+    try{
+
+
+        const respuesta =
+        await fetch("/api/salidas",{
+
+
+            method:"POST",
+
+
+            headers:{
+
+
+                "Content-Type":"application/json"
+
+            },
+
+
+            body:JSON.stringify(datos)
+
+
+        });
+
+
+
+        const resultado =
+        await respuesta.json();
+
+
+
+        if(!respuesta.ok){
+
+            throw new Error(resultado.error);
+
+        }
+
+
+
+        alert("Salida registrada correctamente");
+
+
+        document.getElementById("formSalida").reset();
+
+
+        cargarSalidas();
+
+
+        cargarMateriales();
+
+
+
+    }catch(error){
+
+
+        alert(error.message);
+
+
+    }
+
+
+
+});
+
+
+
+
+
+
+async function cargarSalidas(){
+
+
+    const respuesta =
+    await fetch("/api/salidas");
+
+
+
+    const salidas =
+    await respuesta.json();
+
+
+
+    const tabla =
+    document.getElementById("tablaSalidas");
+
+
+
+    tabla.innerHTML="";
+
+
+
+    salidas.forEach(s=>{
+
+
+        tabla.innerHTML += `
+
+
+        <tr>
+
+        <td>${s.fecha}</td>
+
+        <td>${s.material}</td>
+
+        <td>${s.cantidad}</td>
+
+        <td>${s.responsable || ""}</td>
+
+        <td>-</td>
+
+        <td>${s.observacion || ""}</td>
+
+        </tr>
+
+
+        `;
+
+
+    });
+
+
+}
+
+
+
+
+
+cargarMateriales();
+
+cargarSalidas();
+
+
+
+</script>
 
 </body>
 </html>

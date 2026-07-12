@@ -88,7 +88,205 @@
 
 </main>
 
-<script src="js/proveedores.js"></script>
+<script>
+
+
+const formulario =
+document.getElementById("formProveedor");
+
+
+
+
+// GUARDAR PROVEEDOR
+
+formulario.addEventListener("submit",async(e)=>{
+
+
+    e.preventDefault();
+
+
+
+    const proveedor={
+
+
+        empresa:
+        document.getElementById("empresa").value,
+
+
+        nit:
+        document.getElementById("nit").value,
+
+
+        contacto:
+        document.getElementById("contacto").value,
+
+
+        telefono:
+        document.getElementById("telefono").value,
+
+
+        correo:
+        document.getElementById("correo").value,
+
+
+        direccion:
+        document.getElementById("direccion").value
+
+
+    };
+
+
+
+    const respuesta =
+    await fetch("/api/proveedores",{
+
+
+        method:"POST",
+
+
+        headers:{
+
+
+            "Content-Type":"application/json"
+
+        },
+
+
+        body:JSON.stringify(proveedor)
+
+
+    });
+
+
+
+    if(respuesta.ok){
+
+
+        alert("Proveedor guardado");
+
+
+        formulario.reset();
+
+
+        cargarProveedores();
+
+
+    }
+
+
+
+});
+
+
+
+
+
+
+// MOSTRAR PROVEEDORES
+
+
+async function cargarProveedores(){
+
+
+    const respuesta =
+    await fetch("/api/proveedores");
+
+
+    const proveedores =
+    await respuesta.json();
+
+
+
+    const tabla =
+    document.getElementById("tablaProveedores");
+
+
+
+    tabla.innerHTML="";
+
+
+
+    proveedores.forEach(p=>{
+
+
+        tabla.innerHTML += `
+
+
+        <tr>
+
+
+            <td>${p.empresa}</td>
+
+            <td>${p.nit || ""}</td>
+
+            <td>${p.contacto || ""}</td>
+
+            <td>${p.telefono || ""}</td>
+
+            <td>${p.correo || ""}</td>
+
+            <td>${p.direccion || ""}</td>
+
+
+            <td>
+
+            <button onclick="eliminarProveedor(${p.id})">
+
+            🗑️ Eliminar
+
+            </button>
+
+            </td>
+
+
+        </tr>
+
+
+        `;
+
+
+    });
+
+
+
+}
+
+
+
+
+// ELIMINAR
+
+async function eliminarProveedor(id){
+
+
+    if(confirm("¿Eliminar proveedor?")){
+
+
+        await fetch(`/api/proveedores/${id}`,{
+
+
+            method:"DELETE"
+
+
+        });
+
+
+
+        cargarProveedores();
+
+
+    }
+
+
+}
+
+
+
+cargarProveedores();
+
+
+
+</script>
 
 </body>
 </html>

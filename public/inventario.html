@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,14 +6,17 @@
     <title>Inventario | Sistema de Almacén</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header>
     <h1>Sistema de Almacén</h1>
 </header>
 
+
 <nav>
     <ul>
+
         <li><a href="index.html">🏠 Inicio</a></li>
         <li><a href="materiales.html">📦 Materiales</a></li>
         <li><a href="entradas.html">📥 Entradas</a></li>
@@ -22,22 +24,33 @@
         <li><a href="inventario.html">📊 Inventario</a></li>
         <li><a href="historial.html">📋 Historial</a></li>
         <li><a href="proveedores.html">🏢 Proveedores</a></li>
+
     </ul>
 </nav>
 
+
+
 <main>
+
 
 <h2>Inventario General</h2>
 
+
 <input type="text" id="buscar" placeholder="Buscar material...">
+
 
 <br><br>
 
+
+
 <table border="1" width="100%" cellspacing="0">
+
 
 <thead>
 
+
 <tr>
+
     <th>Código</th>
     <th>Material</th>
     <th>Categoría</th>
@@ -46,22 +59,179 @@
     <th>Stock Mínimo</th>
     <th>Estado</th>
     <th>Ubicación</th>
+
 </tr>
+
 
 </thead>
 
+
+
 <tbody id="tablaInventario">
 
-<!-- Aquí se mostrarán los materiales -->
 
 </tbody>
 
+
+
 </table>
+
 
 </main>
 
-<script src="js/inventario.js"></script>
+
+
+
+<script>
+
+
+// ==========================
+// CARGAR INVENTARIO
+// ==========================
+
+
+async function cargarInventario(){
+
+
+    try{
+
+
+        const respuesta = await fetch("/api/materiales");
+
+
+        const materiales = await respuesta.json();
+
+
+
+        const tabla =
+        document.getElementById("tablaInventario");
+
+
+
+        tabla.innerHTML="";
+
+
+
+        materiales.forEach(m=>{
+
+
+            let estado;
+
+
+
+            if(Number(m.stock) <= Number(m.stock_minimo)){
+
+
+                estado="⚠️ Stock Bajo";
+
+
+            }else{
+
+
+                estado="✅ Disponible";
+
+
+            }
+
+
+
+
+            tabla.innerHTML += `
+
+
+            <tr>
+
+
+                <td>${m.codigo}</td>
+
+                <td>${m.nombre}</td>
+
+                <td>${m.categoria || ""}</td>
+
+                <td>${m.unidad || ""}</td>
+
+                <td>${m.stock}</td>
+
+                <td>${m.stock_minimo}</td>
+
+                <td>${estado}</td>
+
+                <td>${m.ubicacion || ""}</td>
+
+
+            </tr>
+
+
+            `;
+
+
+
+        });
+
+
+
+    }catch(error){
+
+
+        console.log(error);
+
+
+    }
+
+
+}
+
+
+
+
+
+// ==========================
+// BUSCADOR
+// ==========================
+
+
+document.getElementById("buscar")
+.addEventListener("keyup",function(){
+
+
+    let texto =
+    this.value.toLowerCase();
+
+
+
+    document.querySelectorAll("#tablaInventario tr")
+    .forEach(fila=>{
+
+
+        fila.style.display =
+
+        fila.textContent
+        .toLowerCase()
+        .includes(texto)
+
+        ? ""
+
+        : "none";
+
+
+
+    });
+
+
+
+});
+
+
+
+
+
+cargarInventario();
+
+
+
+</script>
+
+
 
 </body>
 </html>
-```
