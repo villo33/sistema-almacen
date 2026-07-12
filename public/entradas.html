@@ -87,7 +87,132 @@
 
 </main>
 
-<script src="js/entradas.js"></script>
+<script>
+
+async function cargarMateriales(){
+
+    const respuesta = await fetch("/api/materiales");
+
+    const materiales = await respuesta.json();
+
+    const select = document.getElementById("material");
+
+
+    select.innerHTML = `
+        <option value="">
+        Seleccione un material
+        </option>
+    `;
+
+
+    materiales.forEach(m=>{
+
+        select.innerHTML += `
+
+        <option value="${m.id}">
+            ${m.nombre} (Stock: ${m.stock})
+        </option>
+
+        `;
+
+    });
+
+}
+
+
+
+
+document.getElementById("formEntrada")
+.addEventListener("submit", async(e)=>{
+
+
+    e.preventDefault();
+
+
+
+    const datos = {
+
+        material_id:
+        document.getElementById("material").value,
+
+
+        cantidad:
+        document.getElementById("cantidad").value,
+
+
+        proveedor_id:null,
+
+
+        observacion:
+        document.getElementById("observacion").value
+
+    };
+
+
+
+    try{
+
+
+        const respuesta = await fetch("/api/entradas",{
+
+
+            method:"POST",
+
+
+            headers:{
+
+
+                "Content-Type":"application/json"
+
+            },
+
+
+            body:JSON.stringify(datos)
+
+
+        });
+
+
+
+        const resultado = await respuesta.json();
+
+
+
+        if(!respuesta.ok){
+
+            throw new Error(resultado.error);
+
+        }
+
+
+
+        alert("Entrada guardada correctamente");
+
+
+        document.getElementById("formEntrada").reset();
+
+
+
+    }catch(error){
+
+
+        alert(error.message);
+
+
+    }
+
+
+
+});
+
+
+
+
+
+cargarMateriales();
+
+
+</script>
 
 </body>
 </html>
