@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,47 +24,63 @@
     </ul>
 </nav>
 
+
 <main>
 
 <h2>Registro de Entrada de Materiales</h2>
 
+
 <form id="formEntrada">
+
 
     <label>Fecha</label><br>
     <input type="date" id="fecha"><br><br>
+
 
     <label>Material</label><br>
     <select id="material">
         <option>Seleccione un material</option>
     </select><br><br>
 
+
     <label>Cantidad</label><br>
     <input type="number" id="cantidad" min="1"><br><br>
+
 
     <label>Proveedor</label><br>
     <input type="text" id="proveedor" placeholder="Nombre del proveedor"><br><br>
 
+
     <label>Número de Factura</label><br>
     <input type="text" id="factura" placeholder="Opcional"><br><br>
+
 
     <label>Recibido por</label><br>
     <input type="text" id="recibido" placeholder="Nombre del almacenista"><br><br>
 
+
     <label>Observaciones</label><br>
     <textarea id="observacion" rows="4"></textarea><br><br>
+
 
     <button type="submit">Guardar Entrada</button>
     <button type="reset">Limpiar</button>
 
+
 </form>
+
 
 <hr><br>
 
+
 <h2>Historial de Entradas</h2>
+
 
 <table border="1" width="100%" cellspacing="0">
 
+
 <thead>
+
 <tr>
     <th>Fecha</th>
     <th>Material</th>
@@ -75,51 +90,146 @@
     <th>Recibido por</th>
     <th>Observación</th>
 </tr>
+
 </thead>
+
 
 <tbody id="tablaEntradas">
 
-<!-- Aquí aparecerán las entradas -->
-
 </tbody>
+
 
 </table>
 
+
 </main>
+
+
 
 <script>
 
+
+// =========================
+// CARGAR MATERIALES
+// =========================
+
 async function cargarMateriales(){
+
 
     const respuesta = await fetch("/api/materiales");
 
+
     const materiales = await respuesta.json();
+
 
     const select = document.getElementById("material");
 
 
+
     select.innerHTML = `
+
         <option value="">
         Seleccione un material
         </option>
+
     `;
+
 
 
     materiales.forEach(m=>{
 
+
         select.innerHTML += `
 
+
         <option value="${m.id}">
+
             ${m.nombre} (Stock: ${m.stock})
+
         </option>
+
 
         `;
 
+
     });
+
 
 }
 
 
+
+// =========================
+// CARGAR HISTORIAL ENTRADAS
+// =========================
+
+async function cargarEntradas(){
+
+
+    const respuesta = await fetch("/api/entradas");
+
+
+    const entradas = await respuesta.json();
+
+
+
+    const tabla = document.getElementById("tablaEntradas");
+
+
+
+    tabla.innerHTML = "";
+
+
+
+    entradas.forEach(e=>{
+
+
+        tabla.innerHTML += `
+
+
+        <tr>
+
+
+            <td>${new Date(e.fecha).toLocaleDateString()}</td>
+
+
+            <td>${e.material}</td>
+
+
+            <td>${e.cantidad}</td>
+
+
+            <td>-</td>
+
+
+            <td>-</td>
+
+
+            <td>-</td>
+
+
+            <td>${e.observacion || ""}</td>
+
+
+        </tr>
+
+
+        `;
+
+
+    });
+
+
+
+}
+
+
+
+
+
+// =========================
+// GUARDAR ENTRADA
+// =========================
 
 
 document.getElementById("formEntrada")
@@ -131,6 +241,7 @@ document.getElementById("formEntrada")
 
 
     const datos = {
+
 
         material_id:
         document.getElementById("material").value,
@@ -146,7 +257,9 @@ document.getElementById("formEntrada")
         observacion:
         document.getElementById("observacion").value
 
+
     };
+
 
 
 
@@ -164,6 +277,7 @@ document.getElementById("formEntrada")
 
                 "Content-Type":"application/json"
 
+
             },
 
 
@@ -174,22 +288,39 @@ document.getElementById("formEntrada")
 
 
 
+
         const resultado = await respuesta.json();
 
 
 
         if(!respuesta.ok){
 
+
             throw new Error(resultado.error);
 
+
         }
+
 
 
 
         alert("Entrada guardada correctamente");
 
 
+
         document.getElementById("formEntrada").reset();
+
+
+
+        // ACTUALIZA LA TABLA AUTOMÁTICAMENTE
+
+        cargarEntradas();
+
+
+
+        // ACTUALIZA STOCK DEL SELECT
+
+        cargarMateriales();
 
 
 
@@ -209,10 +340,16 @@ document.getElementById("formEntrada")
 
 
 
+// CARGA INICIAL
+
 cargarMateriales();
+
+cargarEntradas();
+
 
 
 </script>
+
 
 </body>
 </html>
