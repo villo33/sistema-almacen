@@ -265,7 +265,7 @@ async function cargarSalidas(){
 
         <td>${s.material}</td>
 
-        <td>${s.cantidad}</td>
+        <td>${Number(s.cantidad).toLocaleString("es-CO")}</td>
 
         <td>${s.responsable || ""}</td>
 
