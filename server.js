@@ -214,29 +214,26 @@ app.get("/api/entradas", async (req,res)=>{
 
         const resultado = await pool.query(`
 
-            SELECT 
-            entradas.id,
-            entradas.fecha,
-            materiales.nombre AS material,
-            entradas.cantidad,
-            proveedores.empresa AS proveedor,
-            entradas.observacion
+            SELECT
+                entradas.id,
+                entradas.fecha,
+                materiales.nombre AS material,
+                entradas.cantidad,
+                entradas.proveedor,
+                entradas.factura,
+                entradas.recibido,
+                entradas.observacion
 
             FROM entradas
 
             INNER JOIN materiales
-            ON entradas.material_id = materiales.id
-
-            LEFT JOIN proveedores
-            ON entradas.proveedor_id = proveedores.id
+                ON entradas.material_id = materiales.id
 
             ORDER BY entradas.id DESC
 
         `);
 
-
         res.json(resultado.rows);
-
 
     }catch(error){
 
@@ -249,8 +246,6 @@ app.get("/api/entradas", async (req,res)=>{
     }
 
 });
-
-
 
 // =========================
 // GUARDAR ENTRADA

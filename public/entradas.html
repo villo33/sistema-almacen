@@ -221,58 +221,30 @@ tabla.innerHTML="";
 
 entradas.forEach(e=>{
 
+    tabla.innerHTML += `
 
-tabla.innerHTML += `
+    <tr>
 
+        <td>${new Date(e.fecha).toLocaleDateString()}</td>
 
-<tr>
+        <td>${e.material}</td>
 
-<td>
-${new Date(e.fecha).toLocaleDateString()}
-</td>
+        <td>${e.cantidad}</td>
 
+        <td>${e.proveedor || ""}</td>
 
-<td>
-${e.material}
-</td>
+        <td>${e.factura || ""}</td>
 
+        <td>${e.recibido || ""}</td>
 
-<td>
-${e.cantidad}
-</td>
+        <td>${e.observacion || ""}</td>
 
+    </tr>
 
-<td>
-${e.proveedor || ""}
-</td>
-
-
-<td>
-${e.factura || ""}
-</td>
-
-
-<td>
-${e.recibido || ""}
-</td>
-
-
-<td>
-${e.observacion || ""}
-</td>
-
-
-</tr>
-
-
-`;
-
-
+    `;
 
 });
 
-
-}
 
 
 
