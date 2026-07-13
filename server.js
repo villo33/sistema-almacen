@@ -267,7 +267,12 @@ app.post("/api/entradas", async (req, res) => {
             observacion
         } = req.body;
 
+
         await client.query("BEGIN");
+
+
+
+        // GUARDAR ENTRADA
 
         const entrada = await client.query(
 
@@ -298,6 +303,11 @@ app.post("/api/entradas", async (req, res) => {
 
         );
 
+
+
+
+        // ACTUALIZAR STOCK
+
         await client.query(
 
             `UPDATE materiales
@@ -311,101 +321,54 @@ app.post("/api/entradas", async (req, res) => {
 
         );
 
-        await client.query("COMMIT");
-
-        res.json(entrada.rows[0]);
-
-    } catch (error) {
-
-        await client.query("ROLLBACK");
-
-        console.log(error);
-
-        res.status(500).json({
-            error: error.message
-        });
-
-    } finally {
-
-        client.release();
-
-    }
-
-});
-
-// =========================
-// OBTENER HISTORIAL
-// =========================
-
-app.get("/api/historial", async(req,res)=>{
-
-    try{
-
-
-        const {inicio, fin} = req.query;
-
-
-        let consulta = `
-
-            SELECT
-
-            historial.fecha,
-            historial.tipo,
-            materiales.nombre AS material,
-            historial.cantidad,
-            historial.descripcion AS observacion
-
-            FROM historial
-
-            LEFT JOIN materiales
-
-            ON historial.material_id = materiales.id
-
-        `;
 
 
 
-        let valores = [];
 
+        // GUARDAR EN HISTORIAL GENERAL
 
+        await client.query(
 
-        if(inicio && fin){
+            `INSERT INTO historial
+            (
+                tipo,
+                material_id,
+                cantidad,
+                descripcion
+            )
 
+            VALUES($1,$2,$3,$4)`,
 
-            consulta += `
+            [
+                "Entrada",
+                material_id,
+                cantidad,
+                observacion
+            ]
 
-            WHERE historial.fecha BETWEEN $1 AND $2
-
-            `;
-
-
-            valores.push(inicio,fin);
-
-
-        }
-
-
-
-        consulta += `
-
-            ORDER BY historial.id DESC
-
-        `;
-
-
-
-        const resultado = await pool.query(
-            consulta,
-            valores
         );
 
 
 
-        res.json(resultado.rows);
+
+
+        await client.query("COMMIT");
+
+
+        res.json({
+
+            mensaje:"Entrada registrada correctamente",
+
+            entrada: entrada.rows[0]
+
+        });
 
 
 
-    }catch(error){
+    } catch (error) {
+
+
+        await client.query("ROLLBACK");
 
 
         console.log(error);
@@ -413,9 +376,15 @@ app.get("/api/historial", async(req,res)=>{
 
         res.status(500).json({
 
-            error:"Error al obtener historial"
+            error:error.message
 
         });
+
+
+    } finally {
+
+
+        client.release();
 
 
     }
