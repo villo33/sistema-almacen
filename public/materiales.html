@@ -288,11 +288,20 @@ async function cargarMateriales(){
 
                  <td>${m.ubicacion}</td>
 
-                <td>
+                <td> 
+                    
 
-                    <button onclick="eliminarMaterial(${m.id})">
-                    🗑️ Eliminar
-                    </button>
+                <button onclick="editarMaterial(${m.id})">
+               ✏️ Editar
+                </button>
+
+                <button onclick="eliminarMaterial(${m.id})">
+              🗑️ Eliminar
+                </button>
+
+                
+
+                    
 
                 </td>
 
@@ -350,6 +359,15 @@ async function eliminarMaterial(id){
 
 }
 
+// ==========================
+// EDITAR MATERIAL
+// ==========================
+
+async function editarMaterial(id){
+
+    alert("Próximamente editará el material ID: " + id);
+
+}
 
 
 
