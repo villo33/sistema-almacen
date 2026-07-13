@@ -773,7 +773,6 @@ app.post("/api/salidas", async(req,res)=>{
     // =========================
 // OBTENER HISTORIAL
 // =========================
-
 app.get("/api/historial", async (req, res) => {
 
     try {
@@ -829,8 +828,6 @@ app.get("/api/historial", async (req, res) => {
 
 });
 
-
-});
 // =========================
 // SERVIDOR
 // =========================
