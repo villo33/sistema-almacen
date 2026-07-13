@@ -205,45 +205,41 @@ ${m.nombre} (Stock: ${m.stock})
 
 async function cargarEntradas(){
 
+    const respuesta = await fetch("/api/entradas");
 
-const respuesta = await fetch("/api/entradas");
+    const entradas = await respuesta.json();
 
+    const tabla = document.getElementById("tablaEntradas");
 
-const entradas = await respuesta.json();
+    tabla.innerHTML = "";
 
+    entradas.forEach(e=>{
 
-const tabla = document.getElementById("tablaEntradas");
+        tabla.innerHTML += `
 
+        <tr>
 
-tabla.innerHTML="";
+            <td>${new Date(e.fecha).toLocaleDateString()}</td>
 
+            <td>${e.material}</td>
 
+            <td>${e.cantidad}</td>
 
-entradas.forEach(e=>{
+            <td>${e.proveedor || ""}</td>
 
-    tabla.innerHTML += `
+            <td>${e.factura || ""}</td>
 
-    <tr>
+            <td>${e.recibido || ""}</td>
 
-        <td>${new Date(e.fecha).toLocaleDateString()}</td>
+            <td>${e.observacion || ""}</td>
 
-        <td>${e.material}</td>
+        </tr>
 
-        <td>${e.cantidad}</td>
+        `;
 
-        <td>${e.proveedor || ""}</td>
+    });
 
-        <td>${e.factura || ""}</td>
-
-        <td>${e.recibido || ""}</td>
-
-        <td>${e.observacion || ""}</td>
-
-    </tr>
-
-    `;
-
-});
+} // ← ESTA LLAVE ES LA QUE CIERRA LA FUNCIÓN
 
 
 
