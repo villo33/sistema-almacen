@@ -8,6 +8,8 @@
 <title>Historial | Sistema de Almacén</title>
 
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1565c0">
 
 </head>
 
@@ -398,6 +400,34 @@ pdf.save(nombre);
 buscarHistorial();
 
 
+
+</script>
+
+<script>
+
+if("serviceWorker" in navigator){
+
+window.addEventListener("load",()=>{
+
+
+navigator.serviceWorker.register("/service-worker.js")
+
+.then(()=>{
+
+console.log("Service Worker activo");
+
+})
+
+.catch(error=>{
+
+console.log("Error Service Worker",error);
+
+});
+
+
+});
+
+}
 
 </script>
 

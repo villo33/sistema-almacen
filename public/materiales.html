@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materiales | Sistema de Almacén</title>
     <link rel="stylesheet" href="style.css">
+     <link rel="manifest" href="/manifest.json">
+     <meta name="theme-color" content="#1565c0">
 </head>
 
 <body>
@@ -386,6 +388,34 @@ async function editarMaterial(id){
 cargarMateriales();
 
 
+
+</script>
+
+<script>
+
+if("serviceWorker" in navigator){
+
+window.addEventListener("load",()=>{
+
+
+navigator.serviceWorker.register("/service-worker.js")
+
+.then(()=>{
+
+console.log("Service Worker activo");
+
+})
+
+.catch(error=>{
+
+console.log("Error Service Worker",error);
+
+});
+
+
+});
+
+}
 
 </script>
 
