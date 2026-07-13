@@ -256,103 +256,84 @@ app.get("/api/entradas", async (req,res)=>{
 // GUARDAR ENTRADA
 // =========================
 
-app.post("/api/entradas", async(req,res)=>{
-
+app.post("/api/entradas", async (req, res) => {
 
     const client = await pool.connect();
 
-
-    try{
-
+    try {
 
         const {
-
- material_id,
-cantidad,
-proveedor,
-factura,
-recibido,
-observacion
-
+            material_id,
+            cantidad,
+            proveedor,
+            factura,
+            recibido,
+            observacion
         } = req.body;
-
-
 
         await client.query("BEGIN");
 
+        const entrada = await client.query(
 
-
-        const entrada = await client.query(`
-
-            INSERT INTO entradas
+            `INSERT INTO entradas
             (
-            material_id,
-            cantidad,
-            proveedor_id,
-            observacion
+                material_id,
+                proveedor_id,
+                cantidad,
+                proveedor,
+                factura,
+                recibido,
+                observacion
             )
 
-            VALUES($1,$2,$3,$4)
+            VALUES($1,$2,$3,$4,$5,$6,$7)
 
-            RETURNING *
+            RETURNING *`,
 
-        `,
-        [
-            material_id,
-            cantidad,
-            proveedor_id || null,
-            observacion
-        ]);
+            [
+                material_id,
+                null,
+                cantidad,
+                proveedor,
+                factura,
+                recibido,
+                observacion
+            ]
 
+        );
 
+        await client.query(
 
-        await client.query(`
+            `UPDATE materiales
+             SET stock = stock + $1
+             WHERE id = $2`,
 
-            UPDATE materiales
+            [
+                cantidad,
+                material_id
+            ]
 
-            SET stock = stock + $1
-
-            WHERE id=$2
-
-        `,
-        [
-            cantidad,
-            material_id
-        ]);
-
-
+        );
 
         await client.query("COMMIT");
 
-
-
         res.json(entrada.rows[0]);
 
-
-
-    }catch(error){
-
+    } catch (error) {
 
         await client.query("ROLLBACK");
 
-
         console.log(error);
 
-
         res.status(500).json({
-
-            error:"Error al guardar entrada"
-
+            error: error.message
         });
 
-
-
-    }finally{
+    } finally {
 
         client.release();
 
     }
-
 
 });
 
