@@ -105,9 +105,7 @@
 </main>
 
 
-
 <script>
-
 
 async function buscarHistorial(){
 
@@ -118,13 +116,13 @@ let fin = document.getElementById("fechaFin").value;
 
 
 
-let url = "http://localhost:3000/api/historial";
+let url = "https://sistema-almacen-c1je.onrender.com/api/historial";
 
 
 
 if(inicio && fin){
 
-url += `?inicio=${inicio}&fin=${fin}`;
+    url += `?inicio=${inicio}&fin=${fin}`;
 
 }
 
@@ -170,7 +168,6 @@ return;
 
 
 
-
 datos.forEach(movimiento => {
 
 
@@ -186,17 +183,15 @@ tabla.innerHTML += `
 
 <td>${movimiento.cantidad}</td>
 
-<td>${movimiento.responsable}</td>
+<td>${movimiento.responsable || ""}</td>
 
-<td>${movimiento.observacion}</td>
+<td>${movimiento.observacion || ""}</td>
 
 </tr>
 
 `;
 
-
 });
-
 
 
 }
@@ -216,16 +211,9 @@ alert("Error conectando con el servidor");
 }
 
 
-
 // cargar historial al abrir página
 
 buscarHistorial();
 
 
 </script>
-
-
-
-</body>
-
-</html>
