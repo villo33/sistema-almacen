@@ -769,6 +769,7 @@ app.post("/api/salidas", async(req,res)=>{
 
 
     }
+    });
 
     // =========================
 // OBTENER HISTORIAL
