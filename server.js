@@ -770,6 +770,65 @@ app.post("/api/salidas", async(req,res)=>{
 
     }
 
+    // =========================
+// OBTENER HISTORIAL
+// =========================
+
+app.get("/api/historial", async (req, res) => {
+
+    try {
+
+        const { inicio, fin } = req.query;
+
+        let consulta = `
+
+            SELECT
+                historial.fecha,
+                historial.tipo,
+                materiales.nombre AS material,
+                historial.cantidad,
+                historial.usuario AS responsable,
+                historial.descripcion AS observacion
+
+            FROM historial
+
+            LEFT JOIN materiales
+            ON historial.material_id = materiales.id
+
+        `;
+
+        const valores = [];
+
+        if (inicio && fin) {
+
+            consulta += `
+                WHERE DATE(historial.fecha) BETWEEN $1 AND $2
+            `;
+
+            valores.push(inicio, fin);
+
+        }
+
+        consulta += `
+            ORDER BY historial.fecha DESC
+        `;
+
+        const resultado = await pool.query(consulta, valores);
+
+        res.json(resultado.rows);
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            error: "Error al obtener historial"
+        });
+
+    }
+
+});
+
 
 });
 // =========================
