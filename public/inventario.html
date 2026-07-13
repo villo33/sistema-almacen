@@ -150,9 +150,9 @@ async function cargarInventario(){
 
                 <td>${m.unidad || ""}</td>
 
-                <td>${m.stock}</td>
+                <td>${parseFloat(m.stock)}</td>
 
-                <td>${m.stock_minimo}</td>
+               <td>${parseFloat(m.stock_minimo)}</td>
 
                 <td>${estado}</td>
 
