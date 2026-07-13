@@ -1,4 +1,4 @@
-const CACHE_NAME = "sistema-almacen-v1";
+const CACHE_NAME = "sistema-almacen-v2";
 
 
 const ARCHIVOS_CACHE = [
@@ -7,13 +7,17 @@ const ARCHIVOS_CACHE = [
     "/index.html",
     "/style.css",
     "/manifest.json",
+    "/service-worker.js",
 
     "/entradas.html",
     "/salidas.html",
     "/historial.html",
     "/inventario.html",
     "/materiales.html",
-    "/proveedores.html"
+    "/proveedores.html",
+
+    "/logo-192.png",
+    "/logo-512.png"
 
 ];
 
