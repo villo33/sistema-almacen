@@ -1,7 +1,7 @@
 {
   "name": "Sistema de Gestión de Almacén",
   "short_name": "Almacén",
-  "description": "Sistema para controlar materiales, entradas, salidas e inventario",
+  "description": "Control de materiales, entradas, salidas e inventario",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
