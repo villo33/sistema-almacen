@@ -160,90 +160,79 @@ const formulario = document.getElementById("formMaterial");
 
 formulario.addEventListener("submit", async(e)=>{
 
-
     e.preventDefault();
-
 
     const material = {
 
-
         codigo: document.getElementById("codigo").value,
-
         nombre: document.getElementById("nombre").value,
-
         categoria: document.getElementById("categoria").value,
-
         unidad: document.getElementById("unidad").value,
-
         stock: document.getElementById("stock").value,
-
         stock_minimo: document.getElementById("minimo").value,
-
         ubicacion: document.getElementById("ubicacion").value
-
 
     };
 
-
-
     try{
 
+        let respuesta;
 
-        const respuesta = await fetch("/api/materiales",{
+        if(idEditar){
 
+            // EDITAR
+            respuesta = await fetch(`/api/materiales/${idEditar}`,{
 
-            method:"POST",
+                method:"PUT",
 
-            headers:{
+                headers:{
+                    "Content-Type":"application/json"
+                },
 
-                "Content-Type":"application/json"
+                body:JSON.stringify(material)
 
-            },
+            });
 
+        }else{
 
-            body:JSON.stringify(material)
+            // NUEVO
+            respuesta = await fetch("/api/materiales",{
 
+                method:"POST",
 
-        });
+                headers:{
+                    "Content-Type":"application/json"
+                },
 
+                body:JSON.stringify(material)
 
-
-        if(!respuesta.ok){
-
-            throw new Error("Error servidor");
+            });
 
         }
 
+        if(!respuesta.ok){
+            throw new Error("Error servidor");
+        }
 
-
-        alert("Material guardado correctamente");
-
+        alert(idEditar ? "Material actualizado correctamente" : "Material guardado correctamente");
 
         formulario.reset();
 
+        idEditar = null;
+
+        formulario.querySelector("button[type='submit']").textContent = "Guardar Material";
 
         cargarMateriales();
 
-
-
     }catch(error){
-
 
         console.log(error);
 
         alert("Error al guardar material");
 
-
     }
 
-
-
 });
-
-
-
-
-
 // CARGAR MATERIALES
 
 
