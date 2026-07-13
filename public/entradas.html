@@ -183,7 +183,7 @@ select.innerHTML += `
 
 <option value="${m.id}">
 
-${m.nombre} (Stock: ${m.stock})
+${m.nombre} (Stock: ${Number(m.stock).toLocaleString("es-CO")})
 
 </option>
 
