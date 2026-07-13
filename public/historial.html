@@ -62,9 +62,12 @@
 
 
 <button onclick="buscarHistorial()">
-
 🔎 Buscar
+</button>
 
+
+<button onclick="generarPDF()">
+📄 Generar PDF
 </button>
 
 
@@ -72,6 +75,7 @@
 
 
 <br>
+
 
 
 <table border="1" width="100%" cellspacing="0">
@@ -105,7 +109,58 @@
 </main>
 
 
+
+<!-- Librerías PDF -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+
+
 <script>
+
+
+const API = "https://sistema-almacen-c1je.onrender.com/api/historial";
+
+
+
+function formatoFecha(fecha){
+
+
+let f = new Date(fecha);
+
+
+return (
+
+f.getDate().toString().padStart(2,"0")
++
+"/"
++
+(f.getMonth()+1).toString().padStart(2,"0")
++
+"/"
++
+f.getFullYear()
+
+);
+
+
+}
+
+
+
+
+function formatoCantidad(valor){
+
+
+return Math.round(Number(valor) * 10);
+
+
+}
+
+
+
 
 async function buscarHistorial(){
 
@@ -116,13 +171,13 @@ let fin = document.getElementById("fechaFin").value;
 
 
 
-let url = "https://sistema-almacen-c1je.onrender.com/api/historial";
+let url = API;
 
 
 
 if(inicio && fin){
 
-    url += `?inicio=${inicio}&fin=${fin}`;
+url += `?inicio=${inicio}&fin=${fin}`;
 
 }
 
@@ -148,7 +203,7 @@ tabla.innerHTML="";
 if(datos.length === 0){
 
 
-tabla.innerHTML = `
+tabla.innerHTML=`
 
 <tr>
 
@@ -168,20 +223,21 @@ return;
 
 
 
-datos.forEach(movimiento => {
+
+datos.forEach(movimiento=>{
 
 
-tabla.innerHTML += `
+tabla.innerHTML +=`
 
 <tr>
 
-<td>${movimiento.fecha}</td>
+<td>${formatoFecha(movimiento.fecha)}</td>
 
 <td>${movimiento.tipo}</td>
 
 <td>${movimiento.material}</td>
 
-<td>${movimiento.cantidad}</td>
+<td>${formatoCantidad(movimiento.cantidad)}</td>
 
 <td>${movimiento.responsable || ""}</td>
 
@@ -189,9 +245,12 @@ tabla.innerHTML += `
 
 </tr>
 
+
 `;
 
+
 });
+
 
 
 }
@@ -211,9 +270,138 @@ alert("Error conectando con el servidor");
 }
 
 
-// cargar historial al abrir página
+
+
+async function generarPDF(){
+
+
+const { jsPDF } = window.jspdf;
+
+
+let inicio = document.getElementById("fechaInicio").value;
+
+let fin = document.getElementById("fechaFin").value;
+
+
+
+let url = API;
+
+
+
+if(inicio && fin){
+
+url += `?inicio=${inicio}&fin=${fin}`;
+
+}
+
+
+
+let respuesta = await fetch(url);
+
+
+let datos = await respuesta.json();
+
+
+
+let pdf = new jsPDF();
+
+
+
+pdf.setFontSize(16);
+
+pdf.text(
+"SISTEMA DE GESTIÓN DE ALMACÉN",
+20,
+20
+);
+
+
+
+pdf.setFontSize(13);
+
+pdf.text(
+"REPORTE GENERAL DE MOVIMIENTOS",
+20,
+30
+);
+
+
+
+pdf.setFontSize(11);
+
+
+pdf.text(
+`Periodo: ${inicio || "Todos"} - ${fin || "Todos"}`,
+20,
+40
+);
+
+
+
+let filas = datos.map(movimiento=>[
+
+formatoFecha(movimiento.fecha),
+
+movimiento.tipo,
+
+movimiento.material,
+
+formatoCantidad(movimiento.cantidad),
+
+movimiento.responsable || "",
+
+movimiento.observacion || ""
+
+]);
+
+
+
+pdf.autoTable({
+
+startY:50,
+
+head:[
+
+[
+"Fecha",
+"Tipo",
+"Material",
+"Cantidad",
+"Responsable",
+"Observación"
+]
+
+],
+
+body:filas
+
+});
+
+
+
+let nombre = 
+`Reporte_Almacen_${inicio || "general"}_${fin || ""}.pdf`;
+
+
+
+pdf.save(nombre);
+
+
+
+}
+
+
+
+
+// cargar al abrir
 
 buscarHistorial();
 
 
+
 </script>
+
+
+</body>
+
+</html>
