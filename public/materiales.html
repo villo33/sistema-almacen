@@ -363,13 +363,34 @@ async function eliminarMaterial(id){
 // EDITAR MATERIAL
 // ==========================
 
+let idEditar = null;
+
 async function editarMaterial(id){
 
-    alert("Próximamente editará el material ID: " + id);
+    const respuesta = await fetch("/api/materiales");
+
+    const materiales = await respuesta.json();
+
+    const material = materiales.find(m => m.id == id);
+
+    if(!material){
+        alert("Material no encontrado");
+        return;
+    }
+
+    idEditar = id;
+
+    document.getElementById("codigo").value = material.codigo;
+    document.getElementById("nombre").value = material.nombre;
+    document.getElementById("categoria").value = material.categoria;
+    document.getElementById("unidad").value = material.unidad;
+    document.getElementById("stock").value = material.stock;
+    document.getElementById("minimo").value = material.stock_minimo;
+    document.getElementById("ubicacion").value = material.ubicacion;
+
+    formulario.querySelector("button[type='submit']").textContent = "Actualizar Material";
 
 }
-
-
 
 // INICIAR
 
