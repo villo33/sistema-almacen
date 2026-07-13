@@ -1,70 +1,231 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial | Sistema de Almacén</title>
-    <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Historial | Sistema de Almacén</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
+
 <body>
 
+
 <header>
-    <h1>Sistema de Almacén</h1>
+
+<h1>Sistema de Almacén</h1>
+
 </header>
 
+
 <nav>
-    <ul>
-        <li><a href="index.html">🏠 Inicio</a></li>
-        <li><a href="materiales.html">📦 Materiales</a></li>
-        <li><a href="entradas.html">📥 Entradas</a></li>
-        <li><a href="salidas.html">📤 Salidas</a></li>
-        <li><a href="inventario.html">📊 Inventario</a></li>
-        <li><a href="historial.html">📋 Historial</a></li>
-        <li><a href="proveedores.html">🏢 Proveedores</a></li>
-    </ul>
+
+<ul>
+
+<li><a href="index.html">🏠 Inicio</a></li>
+<li><a href="materiales.html">📦 Materiales</a></li>
+<li><a href="entradas.html">📥 Entradas</a></li>
+<li><a href="salidas.html">📤 Salidas</a></li>
+<li><a href="inventario.html">📊 Inventario</a></li>
+<li><a href="historial.html">📋 Historial</a></li>
+<li><a href="proveedores.html">🏢 Proveedores</a></li>
+
+</ul>
+
 </nav>
+
+
 
 <main>
 
-<h2>Historial de Movimientos</h2>
+
+<h2>📋 Historial General de Movimientos</h2>
+
+
+<div>
+
 
 <label>Desde:</label>
+
 <input type="date" id="fechaInicio">
 
+
+
 <label>Hasta:</label>
+
 <input type="date" id="fechaFin">
 
-<button>Buscar</button>
 
-<br><br>
+
+<button onclick="buscarHistorial()">
+
+🔎 Buscar
+
+</button>
+
+
+</div>
+
+
+<br>
+
 
 <table border="1" width="100%" cellspacing="0">
+
 
 <thead>
 
 <tr>
-    <th>Fecha</th>
-    <th>Tipo</th>
-    <th>Material</th>
-    <th>Cantidad</th>
-    <th>Responsable</th>
-    <th>Observación</th>
+
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Material</th>
+<th>Cantidad</th>
+<th>Responsable</th>
+<th>Observación</th>
+
 </tr>
 
 </thead>
 
+
 <tbody id="tablaHistorial">
 
-<!-- Aquí aparecerán todos los movimientos -->
 
 </tbody>
 
+
 </table>
+
 
 </main>
 
 
+
+<script>
+
+
+async function buscarHistorial(){
+
+
+let inicio = document.getElementById("fechaInicio").value;
+
+let fin = document.getElementById("fechaFin").value;
+
+
+
+let url = "http://localhost:3000/api/historial";
+
+
+
+if(inicio && fin){
+
+url += `?inicio=${inicio}&fin=${fin}`;
+
+}
+
+
+
+try{
+
+
+let respuesta = await fetch(url);
+
+
+let datos = await respuesta.json();
+
+
+
+let tabla = document.getElementById("tablaHistorial");
+
+
+tabla.innerHTML="";
+
+
+
+if(datos.length === 0){
+
+
+tabla.innerHTML = `
+
+<tr>
+
+<td colspan="6">
+
+No existen movimientos en ese rango de fechas
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+
+
+datos.forEach(movimiento => {
+
+
+tabla.innerHTML += `
+
+<tr>
+
+<td>${movimiento.fecha}</td>
+
+<td>${movimiento.tipo}</td>
+
+<td>${movimiento.material}</td>
+
+<td>${movimiento.cantidad}</td>
+
+<td>${movimiento.responsable}</td>
+
+<td>${movimiento.observacion}</td>
+
+</tr>
+
+`;
+
+
+});
+
+
+
+}
+
+catch(error){
+
+
+console.log(error);
+
+
+alert("Error conectando con el servidor");
+
+
+}
+
+
+}
+
+
+
+// cargar historial al abrir página
+
+buscarHistorial();
+
+
+</script>
+
+
+
 </body>
+
 </html>
-```

@@ -129,6 +129,7 @@ app.put("/api/materiales/:id", async (req, res) => {
 
         const resultado = await pool.query(
 
+
             `UPDATE materiales SET
 
             codigo=$1,
@@ -340,9 +341,14 @@ app.get("/api/historial", async(req,res)=>{
 
     try{
 
-        const resultado = await pool.query(`
+
+        const {inicio, fin} = req.query;
+
+
+        let consulta = `
 
             SELECT
+
             historial.fecha,
             historial.tipo,
             materiales.nombre AS material,
@@ -352,17 +358,55 @@ app.get("/api/historial", async(req,res)=>{
             FROM historial
 
             LEFT JOIN materiales
+
             ON historial.material_id = materiales.id
+
+        `;
+
+
+
+        let valores = [];
+
+
+
+        if(inicio && fin){
+
+
+            consulta += `
+
+            WHERE historial.fecha BETWEEN $1 AND $2
+
+            `;
+
+
+            valores.push(inicio,fin);
+
+
+        }
+
+
+
+        consulta += `
 
             ORDER BY historial.id DESC
 
-        `);
+        `;
+
+
+
+        const resultado = await pool.query(
+            consulta,
+            valores
+        );
+
 
 
         res.json(resultado.rows);
 
 
+
     }catch(error){
+
 
         console.log(error);
 
