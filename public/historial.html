@@ -118,6 +118,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 
 <script>
@@ -270,128 +271,183 @@ alert("Error conectando con el servidor");
 }
 
 
-
+// PDF// INICIO
 
 async function generarPDF(){
 
+    const { jsPDF } = window.jspdf;
 
-const { jsPDF } = window.jspdf;
+    let inicio = document.getElementById("fechaInicio").value;
+    let fin = document.getElementById("fechaFin").value;
 
+    let url = API;
 
-let inicio = document.getElementById("fechaInicio").value;
+    if(inicio && fin){
+        url += `?inicio=${inicio}&fin=${fin}`;
+    }
 
-let fin = document.getElementById("fechaFin").value;
+    let respuesta = await fetch(url);
+    let datos = await respuesta.json();
 
+    const pdf = new jsPDF("p","mm","a4");
 
+    //==========================
+    // CARGAR LOGO
+    //==========================
 
-let url = API;
+    const logo = new Image();
+    logo.src = "logo-192.png";
 
+    logo.onload = function(){
 
+        pdf.addImage(logo,"PNG",15,10,25,25);
 
-if(inicio && fin){
+        //==========================
+        // ENCABEZADO
+        //==========================
 
-url += `?inicio=${inicio}&fin=${fin}`;
+        pdf.setFont("helvetica","bold");
+        pdf.setFontSize(18);
+        pdf.text("SISTEMA DE GESTIÓN DE ALMACÉN",105,18,{align:"center"});
+
+        pdf.setFontSize(13);
+        pdf.text("REPORTE GENERAL DE MOVIMIENTOS",105,27,{align:"center"});
+
+        pdf.setLineWidth(0.5);
+        pdf.line(15,38,195,38);
+
+        //==========================
+        // FECHA Y PERIODO
+        //==========================
+
+        const hoy = new Date();
+
+        pdf.setFont("helvetica","normal");
+        pdf.setFontSize(10);
+
+        pdf.text(
+            "Fecha de generación: " +
+            hoy.toLocaleDateString("es-CO") +
+            " " +
+            hoy.toLocaleTimeString("es-CO"),
+            15,
+            46
+        );
+
+        pdf.text(
+            "Período: " +
+            (inicio || "Todos") +
+            "  -  " +
+            (fin || "Todos"),
+            15,
+            52
+        );
+
+        pdf.text(
+            "Total de movimientos: " + datos.length,
+            15,
+            58
+        );
+
+        //==========================
+        // TABLA
+        //==========================
+
+        let filas = datos.map(movimiento=>[
+
+            formatoFecha(movimiento.fecha),
+
+            movimiento.tipo,
+
+            movimiento.material,
+
+            Number(movimiento.cantidad).toLocaleString("es-CO"),
+
+            movimiento.responsable || "",
+
+            movimiento.observacion || ""
+
+        ]);
+
+        pdf.autoTable({
+
+            startY:65,
+
+            head:[[
+                "Fecha",
+                "Tipo",
+                "Material",
+                "Cantidad",
+                "Responsable",
+                "Observación"
+            ]],
+
+            body:filas,
+
+            theme:"grid",
+
+            styles:{
+                fontSize:9,
+                cellPadding:3,
+                valign:"middle"
+            },
+
+            headStyles:{
+                fillColor:[21,101,192],
+                textColor:255,
+                fontStyle:"bold"
+            },
+
+            alternateRowStyles:{
+                fillColor:[245,245,245]
+            },
+
+            margin:{
+                left:15,
+                right:15
+            }
+
+        });
+
+        //==========================
+        // PIE DE PÁGINA
+        //==========================
+
+        let paginas = pdf.getNumberOfPages();
+
+        for(let i=1;i<=paginas;i++){
+
+            pdf.setPage(i);
+
+            pdf.setFontSize(9);
+
+            pdf.text(
+                "Sistema de Gestión de Almacén © 2026",
+                15,
+                290
+            );
+
+            pdf.text(
+                "Página "+i+" de "+paginas,
+                195,
+                290,
+                {align:"right"}
+            );
+
+        }
+
+        //==========================
+        // GUARDAR PDF
+        //==========================
+
+        let nombre =
+        `Reporte_Almacen_${inicio || "General"}_${fin || ""}.pdf`;
+
+        pdf.save(nombre);
+
+    };
 
 }
-
-
-
-let respuesta = await fetch(url);
-
-
-let datos = await respuesta.json();
-
-
-
-let pdf = new jsPDF();
-
-
-
-pdf.setFontSize(16);
-
-pdf.text(
-"SISTEMA DE GESTIÓN DE ALMACÉN",
-20,
-20
-);
-
-
-
-pdf.setFontSize(13);
-
-pdf.text(
-"REPORTE GENERAL DE MOVIMIENTOS",
-20,
-30
-);
-
-
-
-pdf.setFontSize(11);
-
-
-pdf.text(
-`Periodo: ${inicio || "Todos"} - ${fin || "Todos"}`,
-20,
-40
-);
-
-
-
-let filas = datos.map(movimiento=>[
-
-formatoFecha(movimiento.fecha),
-
-movimiento.tipo,
-
-movimiento.material,
-
-formatoCantidad(movimiento.cantidad),
-
-movimiento.responsable || "",
-
-movimiento.observacion || ""
-
-]);
-
-
-
-pdf.autoTable({
-
-startY:50,
-
-head:[
-
-[
-"Fecha",
-"Tipo",
-"Material",
-"Cantidad",
-"Responsable",
-"Observación"
-]
-
-],
-
-body:filas
-
-});
-
-
-
-let nombre = 
-`Reporte_Almacen_${inicio || "general"}_${fin || ""}.pdf`;
-
-
-
-pdf.save(nombre);
-
-
-
-}
-
-
-
 
 // cargar al abrir
 
