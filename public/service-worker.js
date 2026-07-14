@@ -1,5 +1,4 @@
-const CACHE_NAME = "sistema-almacen-v2";
-
+const CACHE_NAME = "sistema-almacen-v3";
 
 const ARCHIVOS_CACHE = [
 
@@ -7,104 +6,94 @@ const ARCHIVOS_CACHE = [
     "/index.html",
     "/style.css",
     "/manifest.json",
-    "/service-worker.js",
-
-    "/entradas.html",
-    "/salidas.html",
-    "/historial.html",
-    "/inventario.html",
-    "/materiales.html",
-    "/proveedores.html",
 
     "/logo-192.png",
     "/logo-512.png"
 
 ];
 
+// =========================
+// INSTALAR
+// =========================
 
+self.addEventListener("install", event => {
 
-// INSTALAR APP
+    self.skipWaiting();
 
-self.addEventListener("install", evento => {
-
-
-    evento.waitUntil(
+    event.waitUntil(
 
         caches.open(CACHE_NAME)
-
-        .then(cache => {
-
-            return cache.addAll(ARCHIVOS_CACHE);
-
-        })
+        .then(cache => cache.addAll(ARCHIVOS_CACHE))
 
     );
 
-
 });
 
+// =========================
+// ACTIVAR
+// =========================
 
+self.addEventListener("activate", event => {
 
+    event.waitUntil(
 
-// ACTIVAR Y LIMPIAR VERSIONES ANTIGUAS
+        caches.keys().then(keys =>
 
-self.addEventListener("activate", evento => {
-
-
-    evento.waitUntil(
-
-        caches.keys()
-
-        .then(keys => {
-
-
-            return Promise.all(
+            Promise.all(
 
                 keys.map(key => {
 
-
-                    if(key !== CACHE_NAME){
+                    if (key !== CACHE_NAME) {
 
                         return caches.delete(key);
 
                     }
 
-
                 })
 
-            );
+            )
 
-
-        })
+        ).then(() => self.clients.claim())
 
     );
-
 
 });
 
+// =========================
+// FETCH
+// =========================
 
+self.addEventListener("fetch", event => {
 
+    // Solo manejar peticiones GET
+    if (event.request.method !== "GET") return;
 
-// CARGAR ARCHIVOS DESDE CACHE
+    event.respondWith(
 
-self.addEventListener("fetch", evento => {
+        fetch(event.request)
 
+            .then(response => {
 
-    evento.respondWith(
+                // Guardar copia en caché
+                const copia = response.clone();
 
+                caches.open(CACHE_NAME)
+                .then(cache => {
 
-        caches.match(evento.request)
+                    cache.put(event.request, copia);
 
-        .then(respuesta => {
+                });
 
+                return response;
 
-            return respuesta || fetch(evento.request);
+            })
 
+            .catch(() => {
 
-        })
+                return caches.match(event.request);
 
+            })
 
     );
-
 
 });
