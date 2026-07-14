@@ -46,11 +46,9 @@
     <label>Responsable</label><br>
     <input type="text" id="responsable" placeholder="Persona que recibe el material"><br><br>
 
-    <label>Frente de Trabajo</label><br>
-    <input type="text" id="frente" placeholder="Ej: Torre A, Urbanismo, Cimentación"><br><br>
 
     <label>Observaciones</label><br>
-    <textarea id="observacion" rows="4"></textarea><br><br>
+    <textarea id="observacion" rows="4" placeholder="Escriba el destino del material o cualquier observación importante"></textarea><br><br>
 
     <button type="submit">Registrar Salida</button>
     <button type="reset">Limpiar</button>
@@ -70,7 +68,6 @@
     <th>Material</th>
     <th>Cantidad</th>
     <th>Responsable</th>
-    <th>Frente</th>
     <th>Observación</th>
 </tr>
 
@@ -257,27 +254,23 @@ async function cargarSalidas(){
     salidas.forEach(s=>{
 
 
-        tabla.innerHTML += `
+       tabla.innerHTML += `
 
+<tr>
 
-        <tr>
+<td>${new Date(s.fecha).toLocaleDateString("es-CO")}</td>
 
-       <td>${new Date(s.fecha).toLocaleDateString("es-CO")}</td>
+<td>${s.material}</td>
 
-        <td>${s.material}</td>
+<td>${Number(s.cantidad).toLocaleString("es-CO")}</td>
 
-        <td>${Number(s.cantidad).toLocaleString("es-CO")}</td>
+<td>${s.responsable || ""}</td>
 
-        <td>${s.responsable || ""}</td>
+<td>${s.observacion || ""}</td>
 
-        <td>-</td>
+</tr>
 
-        <td>${s.observacion || ""}</td>
-
-        </tr>
-
-
-        `;
+`;
 
 
     });
