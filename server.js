@@ -266,6 +266,8 @@ app.post("/api/entradas", async (req, res) => {
             recibido,
             observacion
         } = req.body;
+        console.log(req.body);
+        console.log("RECIBIDO:", recibido);
 
 
         await client.query("BEGIN");
@@ -323,74 +325,56 @@ app.post("/api/entradas", async (req, res) => {
 
 
 
+// GUARDAR EN HISTORIAL GENERAL
 
+await client.query(
 
-        // GUARDAR EN HISTORIAL GENERAL
+    `INSERT INTO historial
+    (
+        tipo,
+        material_id,
+        cantidad,
+        usuario,
+        descripcion
+    )
 
-        await client.query(
+    VALUES($1,$2,$3,$4,$5)`,
 
-            `INSERT INTO historial
-            (
-                tipo,
-                material_id,
-                cantidad,
-                descripcion
-            )
+    [
+        "Entrada",
+        material_id,
+        cantidad,
+        recibido,
+        observacion
+    ]
 
-            VALUES($1,$2,$3,$4)`,
+);
+// Confirmar transacción
+await client.query("COMMIT");
 
-            [
-                "Entrada",
-                material_id,
-                cantidad,
-                observacion
-            ]
-
-        );
-
-
-
-
-
-        await client.query("COMMIT");
-
-
-        res.json({
-
-            mensaje:"Entrada registrada correctamente",
-
-            entrada: entrada.rows[0]
-
-        });
-
-
-
-    } catch (error) {
-
-
-        await client.query("ROLLBACK");
-
-
-        console.log(error);
-
-
-        res.status(500).json({
-
-            error:error.message
-
-        });
-
-
-    } finally {
-
-
-        client.release();
-
-
-    }
-
-
+// Respuesta
+res.json({
+    mensaje: "Entrada registrada correctamente",
+    entrada: entrada.rows[0]
 });
+
+} catch (error) {
+
+    await client.query("ROLLBACK");
+
+    console.log(error);
+
+    res.status(500).json({
+        error: error.message
+    });
+
+} finally {
+
+    client.release();
+
+}
+
+}); // ← AQUÍ TERMINA app.post("/api/entradas")
 
 // =========================
 // OBTENER PROVEEDORES
@@ -620,7 +604,8 @@ app.post("/api/salidas", async(req,res)=>{
             observacion
 
         } = req.body;
-
+        console.log(req.body);
+        console.log("RESPONSABLE:", responsable);
 
 
         await client.query("BEGIN");
@@ -709,71 +694,62 @@ app.post("/api/salidas", async(req,res)=>{
 
 
 
+// guardar historial
 
-        // guardar historial
+await client.query(
 
-        await client.query(`
+    `INSERT INTO historial
+    (
+        tipo,
+        material_id,
+        cantidad,
+        usuario,
+        descripcion
+    )
 
-            INSERT INTO historial
+    VALUES($1,$2,$3,$4,$5)`,
 
-            (
-            tipo,
-            material_id,
-            cantidad,
-            descripcion
-            )
+    [
+        "SALIDA",
+        material_id,
+        cantidad,
+        responsable,
+        observacion
+    ]
 
-            VALUES($1,$2,$3,$4)
-
-        `,
-        [
-            "SALIDA",
-            material_id,
-            cantidad,
-            observacion
-        ]);
-
-
-
-
-        await client.query("COMMIT");
+);
 
 
+// confirmar transacción
+await client.query("COMMIT");
 
-        res.json(salida.rows[0]);
+// responder
+res.json(salida.rows[0]);
 
+} catch (error) {
 
+    await client.query("ROLLBACK");
 
-    }catch(error){
+    console.log(error);
 
-
-        await client.query("ROLLBACK");
-
-
-        console.log(error);
-
-
-
-        res.status(500).json({
-
-            error:error.message
-
-        });
-
-
-
-    }finally{
-
-
-        client.release();
-
-
-    }
+    res.status(500).json({
+        error: error.message
     });
 
-    // =========================
+} finally {
+
+    client.release();
+
+}
+
+});   // ← AQUÍ TERMINA app.post("/api/salidas")
+
+
+
+// =========================
 // OBTENER HISTORIAL
 // =========================
+
 app.get("/api/historial", async (req, res) => {
 
     try {
@@ -828,6 +804,7 @@ app.get("/api/historial", async (req, res) => {
     }
 
 });
+
 
 // =========================
 // SERVIDOR
